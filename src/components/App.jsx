@@ -14,17 +14,23 @@ export default class App extends React.Component {
     // number: '',
   };
 
-  addContact = event => {
+  onSubmit = event => {
     event.preventDefault();
     const form = event.currentTarget;
     const name = form.elements.name.value;
     const number = form.elements.number.value;
-    console.log(name);
-    console.log(number);
-    this.setState(({ contacts }) => ({
-      contacts: [...contacts, { id: nanoid(), name, number }],
-    }));
-    form.reset();
+    // console.log(name);
+    // console.log(number);
+    if (
+      this.state.contacts.some(({ name: contactName }) => contactName === name)
+    ) {
+      alert(`${name} is already in contacts!`);
+    } else {
+      this.setState(({ contacts }) => ({
+        contacts: [...contacts, { id: nanoid(), name, number }],
+      }));
+      form.reset();
+    }
   };
 
   searchContact = event => {
@@ -35,7 +41,7 @@ export default class App extends React.Component {
     return (
       <div>
         <h2>Phonebook</h2>
-        <form onSubmit={this.addContact}>
+        <form onSubmit={this.onSubmit}>
           <input
             type="text"
             name="name"
