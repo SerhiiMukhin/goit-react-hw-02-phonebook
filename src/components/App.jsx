@@ -1,5 +1,7 @@
 import React from 'react';
 import { nanoid } from 'nanoid';
+import { ContactForm } from './ContactForm/ContactForm';
+import { Filter } from './Filter/Filter';
 
 export default class App extends React.Component {
   state = {
@@ -46,39 +48,20 @@ export default class App extends React.Component {
   };
 
   render() {
+    const { filter, contacts } = this.state;
     return (
       <div>
         <h2>Phonebook</h2>
-        <form onSubmit={this.onSubmit}>
-          <input
-            type="text"
-            name="name"
-            pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-            title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-            required
-          />
-          <input
-            type="tel"
-            name="number"
-            pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-            title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-            required
-          />
-          <button type="submit">Add contact</button>
-        </form>
+        <ContactForm onSubmit={this.onSubmit}></ContactForm>
+
         <h2>Contacts</h2>
-        <h3>Find contacts by name</h3>
-        <input
-          type="text"
-          name="filter"
-          value={this.state.filter}
-          onChange={this.searchContact}
-        />
+        <Filter filter={filter} searchContact={this.searchContact}></Filter>
+
         <ul>
-          {this.state.contacts.length > 0 ? (
-            this.state.contacts
+          {contacts.length > 0 ? (
+            contacts
               .filter(({ name }) =>
-                name.toLowerCase().includes(this.state.filter.toLowerCase())
+                name.toLowerCase().includes(filter.toLowerCase())
               )
               .map(contact => (
                 <li key={contact.id}>
