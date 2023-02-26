@@ -2,6 +2,7 @@ import React from 'react';
 import { nanoid } from 'nanoid';
 import { ContactForm } from './ContactForm/ContactForm';
 import { Filter } from './Filter/Filter';
+import { ContactList } from './ContactList/ContactList';
 
 export default class App extends React.Component {
   state = {
@@ -12,8 +13,6 @@ export default class App extends React.Component {
       { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: '',
-    // name: '',
-    // number: '',
   };
 
   onSubmit = event => {
@@ -21,8 +20,6 @@ export default class App extends React.Component {
     const form = event.currentTarget;
     const name = form.elements.name.value;
     const number = form.elements.number.value;
-    // console.log(name);
-    // console.log(number);
     if (
       this.state.contacts.some(({ name: contactName }) => contactName === name)
     ) {
@@ -40,7 +37,6 @@ export default class App extends React.Component {
   };
 
   deleteContact = event => {
-    // console.log(event.currentTarget.value);
     const id = event.currentTarget.value;
     this.setState({
       contacts: this.state.contacts.filter(contact => contact.id !== id),
@@ -53,33 +49,13 @@ export default class App extends React.Component {
       <div>
         <h2>Phonebook</h2>
         <ContactForm onSubmit={this.onSubmit}></ContactForm>
-
         <h2>Contacts</h2>
         <Filter filter={filter} searchContact={this.searchContact}></Filter>
-
-        <ul>
-          {contacts.length > 0 ? (
-            contacts
-              .filter(({ name }) =>
-                name.toLowerCase().includes(filter.toLowerCase())
-              )
-              .map(contact => (
-                <li key={contact.id}>
-                  <p>{contact.name}</p>
-                  <p>{contact.number}</p>
-                  <button
-                    type="button"
-                    onClick={this.deleteContact}
-                    value={contact.id}
-                  >
-                    Delete contact
-                  </button>
-                </li>
-              ))
-          ) : (
-            <p>No contacts added yet...</p>
-          )}
-        </ul>
+        <ContactList
+          contacts={contacts}
+          filter={filter}
+          deleteContact={this.deleteContact}
+        ></ContactList>
       </div>
     );
   }
