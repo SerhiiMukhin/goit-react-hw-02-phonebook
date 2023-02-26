@@ -10,8 +10,8 @@ export default class App extends React.Component {
       { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: '',
-    name: '',
-    number: '',
+    // name: '',
+    // number: '',
   };
 
   addContact = event => {
@@ -25,6 +25,10 @@ export default class App extends React.Component {
       contacts: [...contacts, { id: nanoid(), name, number }],
     }));
     form.reset();
+  };
+
+  searchContact = event => {
+    this.setState({ filter: event.target.value });
   };
 
   render() {
@@ -49,13 +53,28 @@ export default class App extends React.Component {
           <button type="submit">Add contact</button>
         </form>
         <h2>Contacts</h2>
+        <h3>Find contacts by name</h3>
+        <input
+          type="text"
+          name="filter"
+          value={this.state.filter}
+          onChange={this.searchContact}
+        />
         <ul>
-          {this.state.contacts.map(contact => (
-            <li key={contact.id}>
-              <p>{contact.name}</p>
-              <p>{contact.number}</p>
-            </li>
-          ))}
+          {this.state.contacts.length > 0 ? (
+            this.state.contacts
+              .filter(({ name }) =>
+                name.toLowerCase().includes(this.state.filter.toLowerCase())
+              )
+              .map(contact => (
+                <li key={contact.id}>
+                  <p>{contact.name}</p>
+                  <p>{contact.number}</p>
+                </li>
+              ))
+          ) : (
+            <p>No contacts added yet...</p>
+          )}
         </ul>
       </div>
     );
