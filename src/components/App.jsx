@@ -37,6 +37,14 @@ export default class App extends React.Component {
     this.setState({ filter: event.target.value });
   };
 
+  deleteContact = event => {
+    // console.log(event.currentTarget.value);
+    const id = event.currentTarget.value;
+    this.setState({
+      contacts: this.state.contacts.filter(contact => contact.id !== id),
+    });
+  };
+
   render() {
     return (
       <div>
@@ -76,6 +84,13 @@ export default class App extends React.Component {
                 <li key={contact.id}>
                   <p>{contact.name}</p>
                   <p>{contact.number}</p>
+                  <button
+                    type="button"
+                    onClick={this.deleteContact}
+                    value={contact.id}
+                  >
+                    Delete contact
+                  </button>
                 </li>
               ))
           ) : (
